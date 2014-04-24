@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>QR code Generator</title>
+		<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"/>
+	</head>
+	<body>
+		<div class="container">
+			<div class="jumbotron">
+				<h1>QRコードジェネレーター</h1>
+
+				<form id="form" class="form-horizontal">
+					<input id="text" class="form-control" type="text" name="text" placeholder="ex. http://eje-c.com" required>
+					<label class="radio-inline">
+						<input type="radio" name="format" value="png" checked />
+						PNG</label>
+					<label class="radio-inline">
+						<input type="radio" name="format" value="svg"/>
+						SVG</label>
+					<label class="radio-inline">
+						<input type="radio" name="format" value="pdf"/>
+						PDF</label>
+					<label class="radio-inline">
+						<input type="radio" name="format" value="eps"/>
+						EPS</label>
+					<p style="margin-top:10px;">
+						<input id="hidden-file-save" type="file" nwsaveas="filename.txt" class="hidden" />
+						<button id="btn-create" class="btn btn-primary btn-lg" type="button">
+							QRコード作成
+						</button>
+					</p>
+				</form>
+			</div>
+		</div>
+		<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			var qr = require('qr-image');
+			var fs = require('fs');
+			jQuery(function($) {
+				$('#btn-create').on('click', function() {
+					var text = $('#text').val();
+					var format = $('[name=format]:checked').val();
+
+					if (!text || !format)
+						return;
+
+					$('#hidden-file-save').attr('nwsaveas', 'qr.' + format).attr('accept', '.' + format).click();
+				});
+				$('#hidden-file-save').on('change', function() {
+					var file = this.value;
+					var text = $('#text').val();
+					var format = $('[name=format]:checked').val();
+
+					if (!file || !text || !format)
+						return;
+
+					qr.image(text, {
+						type : format
+					}).pipe(fs.createWriteStream(file));
+				});
+			});
+
+		</script>
+	</body>
+</html>

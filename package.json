@@ -1,0 +1,10 @@
+{
+	"name": "QR code generator",
+	"main": "html/index.html",
+	"window": {
+		"toolbar": false,
+		"width": 640,
+		"height": 320,
+		"resizable": false
+	}
+}
